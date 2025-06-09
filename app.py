@@ -42,8 +42,8 @@ def _make_pair(group: str, folder_a: str, suffix_a: str, folder_b: str, suffix_b
     """Return 10 (group, img1, img2) tuples for indexes 1‑10."""
     pairs = []
     for i in range(1, 11):
-        img1 = f"images/{folder_a}/{i}_{suffix_a}.jpg"  # path is relative to static/
-        img2 = f"images/{folder_b}/{i}_{suffix_b}.jpg"
+        img1 = f"images/{folder_a}/{i}_{suffix_a}.png"  # path is relative to static/
+        img2 = f"images/{folder_b}/{i}_{suffix_b}.png"
         pairs.append((group, img1, img2))
     return pairs
 
