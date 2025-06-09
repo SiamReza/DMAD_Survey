@@ -1,118 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Comparison {{ index + 1 }} of {{ total }}</title>
-  <style>
-    /* Reset & base */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-      padding: 20px;
-    }
-
-    /* Container */
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-    }
-
-    /* Image layout */
-    .images {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .image-wrapper {
-      flex: 1 1 48%;
-    }
-    .image-wrapper img {
-      width: 100%;
-      height: auto;
-      border-radius: 4px;
-      display: block;
-    }
-
-    /* Slider & form */
-    form {
-      text-align: center;
-    }
-    #rating {
-      width: 100%;
-      margin: 10px 0;
-    }
-    #ratingValue {
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-    }
-    #nextBtn {
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 4px;
-      background: #007BFF;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    #nextBtn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-    #nextBtn:not(:disabled):hover {
-      background: #0056b3;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      .image-wrapper { flex: 1 1 100%; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Similarity Survey ({{ index + 1 }} of {{ total }})</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: #e5e7eb; border-radius: 9999px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; background: #3b82f6; cursor: pointer; border-radius: 50%; border: 2px solid white; }
+        input[type=range]::-moz-range-thumb { width: 18px; height: 18px; background: #3b82f6; cursor: pointer; border-radius: 50%; border: 2px solid white; }
+        .range-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280; padding: 0 2px; }
+    </style>
 </head>
-<body>
-  <div class="container">
-    <h2>{{ group }} ({{ index + 1 }} of {{ total }})</h2>
-    <div class="images">
-      <div class="image-wrapper">
-        <img src="{{ url_for('static', filename=img1) }}" alt="Image 1">
-      </div>
-      <div class="image-wrapper">
-        <img src="{{ url_for('static', filename=img2) }}" alt="Image 2">
-      </div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-2 sm:p-4">
+    <div class="container mx-auto max-w-6xl w-full">
+        <div class="bg-white rounded-xl shadow-lg flex flex-col" style="max-height: 97vh;">
+            <div class="p-2 text-center border-b border-gray-200">
+                <h2 class="text-base sm:text-lg font-semibold text-gray-800">DMAD Survey: Facial Comparison</h2>
+                <p class="text-xs text-gray-500">{{ group }} (Comparison {{ index + 1 }} of {{ total }})</p>
+            </div>
+
+            <!-- This div will now stack vertically on small screens and go horizontal on medium+ screens -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 flex-grow overflow-hidden">
+                <div class="image-wrapper rounded-md overflow-hidden flex items-center justify-center">
+                    <img src="{{ url_for('static', filename=img1) }}" alt="Image 1" class="object-contain max-w-full max-h-full">
+                </div>
+                <div class="image-wrapper rounded-md overflow-hidden flex items-center justify-center">
+                    <img src="{{ url_for('static', filename=img2) }}" alt="Image 2" class="object-contain max-w-full max-h-full">
+                </div>
+            </div>
+
+            <div class="p-2 border-t border-gray-200">
+                <form id="ratingForm" method="post" class="text-center">
+                    <label for="rating" class="block text-sm font-medium text-gray-700">Are these images of the same person?</label>
+                    <div class="max-w-xs mx-auto">
+                        <div id="ratingValue" class="text-sm font-bold text-blue-600 h-5">Unsure</div>
+                        <input type="range" id="rating" name="rating" min="1" max="5" value="3" required class="my-1">
+                        <div class="range-labels">
+                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                        </div>
+                    </div>
+                    <button type="submit" id="nextBtn" class="mt-2 w-full sm:w-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1 px-4 text-xs rounded-md transition-transform transform hover:scale-105">
+                        Next
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <form id="ratingForm" method="post">
-      <input type="range" id="rating" name="rating" min="1" max="5" value="3" required>
-      <div id="ratingValue">3</div>
-      <button type="submit" id="nextBtn" disabled>Next</button>
-    </form>
-  </div>
-
-  <script>
-    const ratingSlider = document.getElementById('rating');
-    const ratingValue  = document.getElementById('ratingValue');
-    const nextBtn      = document.getElementById('nextBtn');
-
-    // Enable Next button once user interacts
-    ratingSlider.addEventListener('input', function() {
-      ratingValue.textContent = this.value;
-      nextBtn.disabled = false;
-    });
-  </script>
+    <script>
+        const ratingSlider = document.getElementById('rating'), ratingValue = document.getElementById('ratingValue');
+        const ratingLabels = { '1': 'Definitely Different', '2': 'Likely Different', '3': 'Unsure', '4': 'Likely Same', '5': 'Definitely Same' };
+        function updateRatingText() { ratingValue.textContent = ratingLabels[ratingSlider.value]; }
+        updateRatingText();
+        ratingSlider.addEventListener('input', updateRatingText);
+    </script>
 </body>
 </html>

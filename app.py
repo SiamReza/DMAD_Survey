@@ -1,7 +1,7 @@
 """
 Flask survey application — minimal, self‑contained.
 Folder layout assumed:
-    survey-app/
+    DMAD/
     ├─ app.py                  (this file)
     ├─ static/images/<folders> (all source images)
     └─ results/                (per‑participant CSVs)
