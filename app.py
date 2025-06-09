@@ -169,6 +169,16 @@ def finish():
 # Entrypoint
 ###############################################################################
 
+########################### For Local
+
+# if __name__ == "__main__":
+#     # Enable reloader/debug only for local development
+#     app.run(debug=True, port=5000)
+
+############################ for deploy
+
 if __name__ == "__main__":
-    # Enable reloader/debug only for local development
-    app.run(debug=True, port=5000)
+    # On Replit, $PORT is set for you; fall back to 3000 if not present
+    port = int(os.environ.get("PORT", 3000))
+    # Bind to 0.0.0.0 so Replit’s proxy can route incoming web traffic
+    app.run(host="0.0.0.0", port=port, debug=True)
