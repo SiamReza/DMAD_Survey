@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Comparison {{ index + 1 }} of {{ total }}</title>
+  <style>
+    /* Reset & base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 20px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    /* Image layout */
+    .images {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .image-wrapper {
+      flex: 1 1 48%;
+    }
+    .image-wrapper img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+    }
+
+    /* Slider & form */
+    form {
+      text-align: center;
+    }
+    #rating {
+      width: 100%;
+      margin: 10px 0;
+    }
+    #ratingValue {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+    #nextBtn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #007BFF;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    #nextBtn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    #nextBtn:not(:disabled):hover {
+      background: #0056b3;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .image-wrapper { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>{{ group }} ({{ index + 1 }} of {{ total }})</h2>
+    <div class="images">
+      <div class="image-wrapper">
+        <img src="{{ url_for('static', filename=img1) }}" alt="Image 1">
+      </div>
+      <div class="image-wrapper">
+        <img src="{{ url_for('static', filename=img2) }}" alt="Image 2">
+      </div>
+    </div>
+
+    <form id="ratingForm" method="post">
+      <input type="range" id="rating" name="rating" min="1" max="5" value="3" required>
+      <div id="ratingValue">3</div>
+      <button type="submit" id="nextBtn" disabled>Next</button>
+    </form>
+  </div>
+
+  <script>
+    const ratingSlider = document.getElementById('rating');
+    const ratingValue  = document.getElementById('ratingValue');
+    const nextBtn      = document.getElementById('nextBtn');
+
+    // Enable Next button once user interacts
+    ratingSlider.addEventListener('input', function() {
+      ratingValue.textContent = this.value;
+      nextBtn.disabled = false;
+    });
+  </script>
+</body>
+</html>
